@@ -13,13 +13,14 @@ BOT_NAME = 'zom_scrapper'
 
 SPIDER_MODULES = ['zom_scrapper.spiders']
 NEWSPIDER_MODULE = 'zom_scrapper.spiders'
-
+DEFAULT_ITEM_CLASS = 'zomatodata.items.ZomScrapperItem'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'zom_scrapper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
+
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

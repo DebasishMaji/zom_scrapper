@@ -27,8 +27,6 @@ class ZomScrapperItem(Item):
     rating_votes = Field()
     reviews = Field()
     photos = Field()
-    bookmarks = Field()
-    checkins = Field()
     cuisines = Field()
     collections = Field()
     latitude = Field()
@@ -36,6 +34,7 @@ class ZomScrapperItem(Item):
     opening_hours = Field()
     booking_link = Field()
     highlights = Field()
+    phone_nos = Field()
 
 
 def int_convert(x):
@@ -70,6 +69,26 @@ def strip_blank_spaces(s):
         return s
 
 
+def get_latitude(s):
+    try:
+        result = re.search('%s(.*)%s' % ('markers=', ',pin_res'), s).group(1)
+        return result.split(',')[0]
+    except:
+        return None
+
+
+def get_longitude(s):
+    try:
+        print("============Raw lat long data===========")
+        print(s)
+        result = re.search('%s(.*)%s' % ('markers=', ',pin_res'), s).group(1)
+        print("=============long lat data============")
+        print(result)
+        return result.split(',')[1]
+    except:
+        return None
+
+
 class RestItemLoader(ItemLoader):
     default_input_processor = MapCompose(unicode_convert)
     default_output_processor = TakeFirst()
@@ -87,7 +106,7 @@ class RestItemLoader(ItemLoader):
     rating_in = MapCompose(unicode.strip, float_convert)
 
     rating_votes_in = MapCompose(int_convert)
-    reviews_in = MapCompose(strip_newline)
+    reviews_in = MapCompose(unicode.strip)
     # photos_in = MapCompose()
     bookmarks_in = MapCompose(int_convert)
     checkins_in = MapCompose(int_convert)
@@ -98,6 +117,6 @@ class RestItemLoader(ItemLoader):
     address_in = MapCompose(unicode.strip)
     address_out = Join()
 
-    latitude_in = MapCompose(float_convert)
-    longitude_in = MapCompose(float_convert)
+    latitude_in = MapCompose(get_latitude)
+    longitude_in = MapCompose(get_longitude)
     opening_hours_out = Identity()
